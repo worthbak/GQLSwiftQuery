@@ -52,7 +52,7 @@ Once defined, you can simply access the `queryString` property of `userQuery` to
 
 ```swift
 print(userQuery.queryString)
-// {users(userId:1,token:123456iadd){user{username,email,points{id,value}}}}
+// {users(userId:1,token:"123456abcd"){user{username,email,points{id,value}}}}
 ```
 
 Finally, if you're building a `mutation` query, simply pass in `.Mutation` for the `GQLSchemaType`: 
@@ -66,7 +66,60 @@ let userQuery = GQLQuery(
 )
 
 print(userQuery.queryString)
-// mutation{users(userId:1,token:123456iadd){user{username,email,points{id,value}}}}
+// mutation{users(userId:1,token:"123456abcd"){user{username,email,points{id,value}}}}
+```
+
+## Full Example Usage (w/ NSURLSession)
+
+In this example, we're constructing a mutation query for creating a Facebook user on a hypothetical social media platform. Upon a successful creation, we're requestion some user data and an API token. 
+
+```
+let userDataQuery = GQLQueryItem(
+  withKeyDesignation: "user",
+  andSubqueryFields: ["id", "username", "email", "facebookId"]
+)
+
+let fullQuery = GQLQuery(
+  withSchemaType: .Mutation,
+  withQueryTitle: "createFacebookUser",
+  withQueryArguments: ["facebookToken": facebookTokenString, "username": "worthbak"],
+  withQueryItems: [userDataQuery, "apiToken"]
+)
+
+let components = NSURLComponents()
+components.scheme = "http"
+components.host = "localhost"
+components.port = 3000
+components.path = "/graphql"
+
+components.query = fullQuery.queryString
+guard let url = components.URL else { return }
+
+let request = NSMutableURLRequest(URL: url)
+request.HTTPMethod = "POST"
+
+let session = NSURLSession.sharedSession()
+let dataTask = session.dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
+  if (error != nil) {
+    print(error)
+  } else {
+    guard let data = data else { return }
+    
+    do {
+      let dict = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) as? NSDictionary
+      
+      if let dict = dict {
+        print(dict)
+      }
+      
+    } catch (let error) {
+      print(error)
+    }
+    
+  }
+})
+
+dataTask.resume()
 ```
 
 ## To-Do
