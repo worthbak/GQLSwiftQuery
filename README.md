@@ -40,7 +40,12 @@ let args = [
   "authToken": "123456abcd"
 ]
 
-let userQuery = GQLQuery(withSchemaType: .Query, withQueryTitle: "users", withQueryArguments: args, withQuery: userQueryItem)
+let userQuery = GQLQuery(
+	withSchemaType: .Query, 
+	withQueryTitle: "users", 
+	withQueryArguments: args, 
+	withQuery: userQueryItem
+)
 ```
 
 Once defined, you can simply access the `queryString` property of `userQuery` to access a full GraphQL query, suitable for use in a GET request to your server: 
@@ -53,7 +58,12 @@ print(userQuery.queryString)
 Finally, if you're building a `mutation` query, simply pass in `.Mutation` for the `GQLSchemaType`: 
 
 ```swift
-let userQuery = GQLQuery(withSchemaType: .Mutation, withQueryTitle: "users", withQueryArguments: args, withQuery: userQueryItem)
+let userQuery = GQLQuery(
+	withSchemaType: .Mutation, 
+	withQueryTitle: "users", 
+	withQueryArguments: args, 
+	withQuery: userQueryItem
+)
 
 print(userQuery.queryString)
 // mutation{users(userId:1,token:123456iadd){user{username,email,points{id,value}}}}
