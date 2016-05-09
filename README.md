@@ -15,7 +15,9 @@ In GQLSwiftQuery, GraphQL queries are defined primarily through objects that con
 
 This may sound more complex than it is. Consider this example: 
 
-```
+```swift
+import GQLSwiftQuery
+
 let pointsSubquery = GQLQueryItem(withKeyDesignation: "points", andSubqueryFields: ["id", "value"])
     
 let userQueryItem = GQLQueryItem(
@@ -32,7 +34,7 @@ let userQueryItem = GQLQueryItem(
 
 In order to turn this GQLQueryItem into a full query, simply pass it in to an instance of `GQLQuery` (along with any required query arguments): 
 
-```
+```swift
 let args = [
   "userId": 1,
   "authToken": "123456abcd"
@@ -43,14 +45,14 @@ let userQuery = GQLQuery(withSchemaType: .Query, withQueryTitle: "users", withQu
 
 Once defined, you can simply access the `queryString` property of `userQuery` to access a full GraphQL query, suitable for use in a GET request to your server: 
 
-```
+```swift
 print(userQuery.queryString)
 // {users(userId:1,token:123456iadd){user{username,email,points{id,value}}}}
 ```
 
 Finally, if you're building a `mutation` query, simply pass in `.Mutation` for the `GQLSchemaType`: 
 
-```
+```swift
 let userQuery = GQLQuery(withSchemaType: .Mutation, withQueryTitle: "users", withQueryArguments: args, withQuery: userQueryItem)
 
 print(userQuery.queryString)
