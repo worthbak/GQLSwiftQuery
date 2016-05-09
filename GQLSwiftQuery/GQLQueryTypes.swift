@@ -33,17 +33,19 @@ public enum GQLSchemaType {
 
 public struct GQLQuery {
   
-  public init(withSchemaType schemaType: GQLSchemaType, withQueryTitle title: String, withQueryArguments arguments: [String: AnyObject]? = nil, withQueryItems queryItems: [GQLQueryItemType]) {
+  public init(withSchemaType schemaType: GQLSchemaType, withQueryTitle title: String, withQueryArguments arguments: [String: AnyObject]? = nil, withQueryItems queryItems: [GQLQueryItemType], includeQueryKey include: Bool = false) {
     self.schemaType = schemaType
     self.queryTitle = title
     self.arguments = arguments
     self.queryItems = queryItems
+    self.includeQueryKey = include
   }
   
   public let schemaType: GQLSchemaType
   public let queryTitle: String
   public let arguments: [String: AnyObject]?
   public let queryItems: [GQLQueryItemType]
+  public let includeQueryKey: Bool
   
   public var queryString: String {
     
@@ -56,9 +58,9 @@ public struct GQLQuery {
     
     switch self.schemaType {
     case .Query:
-      return "query=\(fullQuery)"
+      return "\(self.includeQueryKey ? "query=" : "")\(fullQuery)"
     case .Mutation:
-      return "query=mutation\(fullQuery)"
+      return "\(self.includeQueryKey ? "query=" : "")mutation\(fullQuery)"
     }
   }
 }
