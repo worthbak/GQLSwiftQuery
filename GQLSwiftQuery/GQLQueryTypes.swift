@@ -26,17 +26,17 @@ public enum GQLSchemaType {
 
 public struct GQLQuery {
   
-  public init(withSchemaType schemaType: GQLSchemaType, withQueryTitle title: String, withQueryArguments arguments: [String: AnyObject]? = nil, withQuery query: GQLQueryItemType) {
+  public init(withSchemaType schemaType: GQLSchemaType, withQueryTitle title: String, withQueryArguments arguments: [String: AnyObject]? = nil, withQueryItems queryItems: [GQLQueryItemType]) {
     self.schemaType = schemaType
     self.queryTitle = title
     self.arguments = arguments
-    self.query = query
+    self.queryItems = queryItems
   }
   
   public let schemaType: GQLSchemaType
   public let queryTitle: String
   public let arguments: [String: AnyObject]?
-  public let query: GQLQueryItemType
+  public let queryItems: [GQLQueryItemType]
   
   public var queryString: String {
     
@@ -45,13 +45,13 @@ public struct GQLQuery {
       argumentString = "(\(args.queryArgumentLiteral))"
     } else { argumentString = "" }
     
-    let fullQuery = "{\(self.queryTitle)\(argumentString){\(self.query.queryRepresentation)}}"
+    let fullQuery = "{\(self.queryTitle)\(argumentString){\(self.queryItems.map { return $0.queryRepresentation }.joinWithSeparator(","))}}"
     
     switch self.schemaType {
     case .Query:
-      return fullQuery
+      return "query=\(fullQuery)"
     case .Mutation:
-      return "mutation\(fullQuery)"
+      return "query=mutation\(fullQuery)"
     }
   }
 }
@@ -85,7 +85,7 @@ public struct GQLQueryItem: GQLQueryItemType {
   }
   
   public let keyDesignation: String
-  public let fields: [GQLQueryItemType]? 
+  public let fields: [GQLQueryItemType]?
   
   public var queryRepresentation: String {
     if let fields = self.fields {
