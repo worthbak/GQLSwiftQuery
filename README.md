@@ -73,7 +73,7 @@ print(userQuery.queryString)
 
 In this example, we're constructing a mutation query for creating a Facebook user on a hypothetical social media platform. Upon a successful creation, we're requestion some user data and an API token. 
 
-```
+```swift
 let userDataQuery = GQLQueryItem(
   withKeyDesignation: "user",
   andSubqueryFields: ["id", "username", "email", "facebookId"]
