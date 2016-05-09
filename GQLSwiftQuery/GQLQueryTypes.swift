@@ -9,7 +9,14 @@ extension Dictionary where Key: StringLiteralConvertible, Value: AnyObject {
     
     var argumentString = ""
     for item in argKeys {
-      argumentString += "\(item):\(self[item]!)"
+      let value = self[item]!
+      
+      if value is String {
+        argumentString += "\(item):\"\(value)\""
+      } else {
+        argumentString += "\(item):\(value)"
+      }
+      
       if argKeys.last != item {
         argumentString += ","
       }
