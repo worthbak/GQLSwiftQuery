@@ -33,7 +33,7 @@ public enum GQLSchemaType {
 
 public struct GQLQuery {
   
-  public init(with schemaType: GQLSchemaType, with queryTitle: String, with queryArguments: [String: AnyObject]? = nil, with queryItems: [GQLQueryItemType], includeQueryKey include: Bool = false) {
+  public init(_ schemaType: GQLSchemaType, queryTitle: String, queryArguments: [String: AnyObject]? = nil, queryItems: [GQLQueryItemType], includeQueryKey include: Bool = false) {
     self.schemaType = schemaType
     self.queryTitle = queryTitle
     self.arguments = queryArguments
