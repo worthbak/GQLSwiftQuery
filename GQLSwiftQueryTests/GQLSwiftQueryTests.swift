@@ -29,9 +29,9 @@ class GQLSwiftQueryTests: XCTestCase {
       "token": "123456iadd"
     ]
     
-    let userQuery = GQLQuery(withSchemaType: .Query, withQueryTitle: "users", withQueryArguments: args, withQueryItems: [userQueryItem, "token"], includeQueryKey: true)
+    let userQuery = GQLQuery(with: .query, with: "users", with: args, with: [userQueryItem, "token"], includeQueryKey: true)
     
-    XCTAssertEqual(userQuery.queryString, "query={users(userId:1,token:\"123456iadd\"){user{username,email,points{id,value}},token}}")
+    XCTAssertEqual(userQuery.queryString, "query={users(token:\"123456iadd\",userId:1){user{username,email,points{id,value}},token}}")
   }
   
   func testMutationGeneration() {
@@ -51,9 +51,9 @@ class GQLSwiftQueryTests: XCTestCase {
       "token": "123456iadd"
     ]
     
-    let userQuery = GQLQuery(withSchemaType: .Mutation, withQueryTitle: "users", withQueryArguments: args, withQueryItems: [userQueryItem, "token"], includeQueryKey: true)
+    let userQuery = GQLQuery(with: .mutation, with: "users", with: args, with: [userQueryItem, "token"], includeQueryKey: true)
     
-    XCTAssertEqual(userQuery.queryString, "query=mutation{users(userId:1,token:\"123456iadd\"){user{username,email,points{id,value}},token}}")
+    XCTAssertEqual(userQuery.queryString, "query=mutation{users(token:\"123456iadd\",userId:1){user{username,email,points{id,value}},token}}")
   }
   
 }

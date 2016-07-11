@@ -28,15 +28,15 @@ extension Dictionary where Key: StringLiteralConvertible, Value: AnyObject {
 }
 
 public enum GQLSchemaType {
-  case Query, Mutation
+  case query, mutation
 }
 
 public struct GQLQuery {
   
-  public init(withSchemaType schemaType: GQLSchemaType, withQueryTitle title: String, withQueryArguments arguments: [String: AnyObject]? = nil, withQueryItems queryItems: [GQLQueryItemType], includeQueryKey include: Bool = false) {
+  public init(with schemaType: GQLSchemaType, with queryTitle: String, with queryArguments: [String: AnyObject]? = nil, with queryItems: [GQLQueryItemType], includeQueryKey include: Bool = false) {
     self.schemaType = schemaType
-    self.queryTitle = title
-    self.arguments = arguments
+    self.queryTitle = queryTitle
+    self.arguments = queryArguments
     self.queryItems = queryItems
     self.includeQueryKey = include
   }
@@ -54,12 +54,12 @@ public struct GQLQuery {
       argumentString = "(\(args.queryArgumentLiteral))"
     } else { argumentString = "" }
     
-    let fullQuery = "{\(self.queryTitle)\(argumentString){\(self.queryItems.map { return $0.queryRepresentation }.joinWithSeparator(","))}}"
+    let fullQuery = "{\(self.queryTitle)\(argumentString){\(self.queryItems.map { return $0.queryRepresentation }.joined(separator: ","))}}"
     
     switch self.schemaType {
-    case .Query:
+    case .query:
       return "\(self.includeQueryKey ? "query=" : "")\(fullQuery)"
-    case .Mutation:
+    case .mutation:
       return "\(self.includeQueryKey ? "query=" : "")mutation\(fullQuery)"
     }
   }
@@ -98,7 +98,7 @@ public struct GQLQueryItem: GQLQueryItemType {
   
   public var queryRepresentation: String {
     if let fields = self.fields {
-      let subqueryString = fields.map { return $0.queryRepresentation }.joinWithSeparator(",")
+      let subqueryString = fields.map { return $0.queryRepresentation }.joined(separator: ",")
       return "\(self.keyDesignation){\(subqueryString)}"
     } else {
       return "\(self.keyDesignation)"
